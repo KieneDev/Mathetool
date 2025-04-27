@@ -3,7 +3,7 @@ use crate::helping_tools::display_terminal::display_terminals_validate;
 
 // Rechenregel Potenzen
 pub fn calculate_numbers_powers(numbers: Vec<String>) -> Vec<String> {
-    let mut result_powers_vector: Vec<String> = numbers;
+    let mut result_powers_vector: Vec<String> = numbers.to_vec();
     let mut index: usize = 0;
     let mut counter_powers: usize = 0;
 
@@ -20,7 +20,7 @@ pub fn calculate_numbers_powers(numbers: Vec<String>) -> Vec<String> {
             let result_powers: String = calculate_powers(&result_powers_vector, counter_powers, '^');
             
             removing_from_vector(&mut result_powers_vector, index, result_powers);
-            println!("Vektor danach: {:?}\n", result_powers_vector);
+            println!("Vektor danach: {:?}", result_powers_vector);
             
             index = 0;
         }
@@ -40,8 +40,6 @@ pub fn calculate_numbers_mult_diff(numbers: Vec<String>) -> Vec<String> {
     let mut counter_mult: usize = 0; 
     let mut counter_div: usize = 0;
 
-    println!("\nBerechnung Multiplikation und Division\n");
-    
     while index < result_mul_div_vector.len(){
 
         // Multiplikation
@@ -53,7 +51,7 @@ pub fn calculate_numbers_mult_diff(numbers: Vec<String>) -> Vec<String> {
             let result_mult: String = calculate_mult_diff(&result_mul_div_vector, counter_mult, '*');
             
             removing_from_vector(&mut result_mul_div_vector, index, result_mult);
-            println!("Vektor danach: {:?}\n", result_mul_div_vector);
+            println!("Vektor danach: {:?}", result_mul_div_vector);
             
             index = 0;
         }
@@ -67,7 +65,7 @@ pub fn calculate_numbers_mult_diff(numbers: Vec<String>) -> Vec<String> {
             let result_mult: String = calculate_mult_diff(&result_mul_div_vector, counter_div, '/');
             
             removing_from_vector(&mut result_mul_div_vector, index, result_mult);
-            println!("Vektor danach: {:?}\n", result_mul_div_vector);
+            println!("Vektor danach: {:?}", result_mul_div_vector);
 
             index = 0;
         }
@@ -88,8 +86,6 @@ pub fn calculate_numbers_addition(numbers: Vec<String>) -> String {
     
     let mut result: f64 = 0.0;
 
-    println!("Berechnung Addition und Subtraktion\n");
-    
     for num in numbers.iter() {
         match num.parse::<f64>() {
             Ok(number) => result += number,
@@ -105,6 +101,7 @@ fn calculate_mult_diff(numbers: &Vec<String>, counter: usize, which_operator: ch
     let result: f64;
     let mut operation: String = String::new();
     let mut left_right: Vec<f64> = Vec::new();
+    let mut counter_mult: usize = 0;
 
     for (i, num) in numbers.iter().enumerate() {
         if num.contains(which_operator) {
@@ -112,6 +109,7 @@ fn calculate_mult_diff(numbers: &Vec<String>, counter: usize, which_operator: ch
             
             match which_operator {
                 '*' => {
+                    counter_mult += 1;
                     result = left_right[0] * left_right[1];
                     operation = "Multiplikation".to_string();
                 }
@@ -161,21 +159,7 @@ fn calculate_powers(numbers: &Vec<String>, counter: usize, which_operator: char)
     return result_powers
 }
 
-pub fn calculate_formula(numbers: Vec<String>) {
-    let mut count_powers: usize = 0;
-    let mut count_mult: usize = 0;
-    let mut count_diff: usize = 0;
-    
-    for i in numbers.iter() {
-        if i.contains("^") {count_powers += 1;}
-        if i.contains("*") {count_mult += 1;}
-        if i.contains("/") {count_diff += 1;}
-    }
-    println!();
-    println!("Potenzen      : {}", count_powers);
-    println!("Multiplikation: {}", count_mult);
-    println!("Division      : {}", count_diff);
-}
+
 
 // Kleines Refactoring weil das entfernen und hinzufügen mehrmals
 // vorkommt, habe ich sie ausgelagert.
