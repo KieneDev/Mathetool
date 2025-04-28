@@ -10,7 +10,7 @@ mod algebra;
 mod arithmetic;
 
 fn main() {
-    let equation_string: String = "2+2*2-2^5*8/9-12+5/2".to_string();
+    let equation_string: String = "100+2*2-2^((5*8/9-12)+5)/2".to_string();
     println!();
     display_terminals("Original Formel".to_string(), &equation_string);
 
