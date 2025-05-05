@@ -1,30 +1,20 @@
 use core::f64;
-use std::ops::Index;
 use crate::helping_tools::display_terminal::display_terminals_validate;
 
 // Rechnregel Klammern auflösen und berechnen
 pub fn calculate_resolve_brackets(numbers: Vec<String>, brackets_max_count: usize) -> Vec<String> {
     
-    let result_brackets_vector: Vec<String> = numbers;
-
-    println!("Vektorinhalt: {:?}", result_brackets_vector);
-    println!("Anzahl Klammern: {}", brackets_max_count);
-
-    let brackets_index_array: Vec<usize> = get_brackets_index(&result_brackets_vector);
-    println!("Brackets Index {:?}", brackets_index_array);
-    let mut result_splitted_brackets: Vec<Vec<String>> = extract_brackets(result_brackets_vector, &brackets_index_array);
-    calculate_brackets(result_splitted_brackets.remove(1));
-    println!("Splitted Vektor middle: {:?}", result_splitted_brackets[1]);
-    println!();
-    
-    //println!("Index(1) = {:?}, Index(2) = {:?}", brackets_index_array[0], brackets_index_array[1]);
-    todo!("\nFormel (Klammern) ist noch nicht fertig\n");
-    //return Vec::new();
+    return Vec::new();
 }
 
 // Berechnung für die Klammern um sie danach aufzulösen
 fn calculate_brackets(numbers: Vec<String>) {
-    
+
+    let mut index: usize = 0;
+
+    println!("calculate_brackets");
+
+    todo!("\nFormel (Klammern) ist noch nicht fertig\n");
 }
 
 
@@ -204,34 +194,4 @@ fn left_right_terms(left: &str, right: &str) ->[f64;2] {
     ]
 }
 
-// Funktionen um die Klammern aus der Formel mittels Index
-// zu extrahieren
-fn extract_brackets(numbers_brackets: Vec<String>, brackets_index: &Vec<usize>) -> Vec<Vec<String>> {
 
-    let split_brackets_vector_right: (&[String], &[String]) = numbers_brackets.split_at(brackets_index[3] + 1);
-    let split_vector_brackets: Vec<String> = split_brackets_vector_right.0.to_vec();
-    let split_brackets_vector_left: (&[String], &[String]) = split_vector_brackets.split_at(brackets_index[0]);
-
-    let mut result_splitting: Vec<Vec<String>> = Vec::new();
-
-    result_splitting.push(split_brackets_vector_left.0.to_vec());
-    result_splitting.push(split_brackets_vector_left.1.to_vec());
-    result_splitting.push(split_brackets_vector_right.1.to_vec());
-
-    return result_splitting;
-}
-
-// Funktion zum herausfinden wo die erste und die letzte Klammer ist
-// um später direkt darauf zuzugreifen ohne den String ein weiteres
-// mal von vorne zu iterieren.
-fn get_brackets_index(numbers: &Vec<String>) -> Vec<usize> {
-
-    let mut brackets_index_vector: Vec<usize> = Vec::new();
-
-    for (index, num) in &mut numbers.iter().enumerate() {
-        if num.contains("(") || num.contains(")") {
-            brackets_index_vector.push(index); 
-        }
-    }
-    return brackets_index_vector
-}

@@ -1,6 +1,6 @@
 #![allow(dead_code)]
 
-use arithmetic::basic_arithmetic_ops::calculation_rules::rules_for_calculation;
+use arithmetic::basic_arithmetic_ops::{calculation_rules::{rules_for_calculation, OperatorInfo}, index_operators::find_index, operators::operator};
 use helping_tools::display_terminal::display_terminals;
 
 mod paths;
@@ -10,15 +10,23 @@ mod algebra;
 mod arithmetic;
 
 fn main() {
-    let equation_string: String = "100+2*2-2^((5*8/9-12)+5)/2".to_string();
+    let equation_string: String = "(100+2)*2-2^(5*(8/(9-12)+5)/2)*(8+12)".to_string();
     println!();
     display_terminals("Original Formel".to_string(), &equation_string);
 
     let splitted_terms: Vec<String> = paths::str_manipulation::strings_refactor(equation_string);
 
-    //calculate_formula(splitted_terms);
+    println!("Vektor nach der Bereinigung: {:?}", splitted_terms);
 
-    rules_for_calculation(splitted_terms);
+    let result_index_brackets: Vec<(usize, usize)> = find_index(&splitted_terms);
+
+    println!("Index Klammern: {:?}", result_index_brackets);
+
+    println!("Get_operator: {:?}", operator::pow_operator());
+
+    //todo!("bitte weiter machen!");
+
+    let found_ops: Vec<OperatorInfo> = rules_for_calculation(splitted_terms);
 
     // let result_powers: Vec<String> = paths::calc_nums::calculate_numbers_powers(splitted_terms);
 
