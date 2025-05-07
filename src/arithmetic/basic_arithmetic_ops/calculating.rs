@@ -1,22 +1,6 @@
 use core::f64;
 use crate::helping_tools::display_terminal::display_terminals_validate;
-
-// Rechnregel Klammern auflösen und berechnen
-pub fn calculate_resolve_brackets(numbers: Vec<String>, brackets_max_count: usize) -> Vec<String> {
-    
-    return Vec::new();
-}
-
-// Berechnung für die Klammern um sie danach aufzulösen
-fn calculate_brackets(numbers: Vec<String>) {
-
-    let mut index: usize = 0;
-
-    println!("calculate_brackets");
-
-    todo!("\nFormel (Klammern) ist noch nicht fertig\n");
-}
-
+use num_complex::Complex;
 
 // Rechenregel Potenzen
 pub fn calculate_numbers_powers(numbers: Vec<String>) -> Vec<String> {
@@ -62,7 +46,13 @@ fn calculate_powers(numbers: &Vec<String>, counter: usize, which_operator: char)
             
             match which_operator {
                 '^' => {
-                    result = f64::powf(left_right[0], left_right[1]);
+                    let base = left_right[0];
+                    let exponent = left_right[1];
+                    
+                    let complex_result: Complex<f64> = Complex::new(base, 0.0).powf(exponent);
+
+                    result = complex_result.re;
+                    //result = f64::powf(left_right[0], left_right[1]);
                     operation = "Potenz".to_string();
                 }
                 _ => return "Invalid Number".to_string()
@@ -160,23 +150,88 @@ fn calculate_mult_diff(numbers: &Vec<String>, counter: usize, which_operator: ch
 // und negativ miteinander addiert. Das ist der letzte Schritt
 // bei den Rechenregeln. Da hier das Vorzeichen mitgenommen wird
 // muss man hier nicht auf die Vertauschungsregel achten.
-pub fn calculate_numbers_addition(numbers: Vec<String>) -> String {
-    
-    let mut result: f64 = 0.0;
 
-    for num in numbers.iter() {
-        match num.parse::<f64>() {
-            Ok(number) => result += number,
-            Err(_) => return "Error: invalid number".to_string(),
+pub fn calculate_numbers_addition(numbers: Vec<String>) -> Vec<String> {
+    
+    let mut result_add_sub_vector: Vec<String> = numbers;
+    let mut index: usize = 0;
+    let mut counter_mult: usize = 0; 
+    let mut counter_div: usize = 0;
+
+    while index < result_add_sub_vector.len(){
+
+        // Multiplikation
+        if result_add_sub_vector[index].contains("+") {
+            
+            counter_mult += 1;
+
+            println!("Vektor davor: {:?}", result_add_sub_vector);
+            let result_add: String = calculate_addition(&result_add_sub_vector, counter_mult, '+');
+            
+            removing_from_vector(&mut result_add_sub_vector, index, result_add);
+            println!("Vektor danach: {:?}", result_add_sub_vector);
+            
+            index = 0;
+        }
+
+        // Division
+        else if result_add_sub_vector[index].contains("-") {
+
+            counter_div += 1;
+
+            println!("Vektor davor: {:?}", result_add_sub_vector);
+            let result_add: String = calculate_addition(&result_add_sub_vector, counter_div, '-');
+            
+            removing_from_vector(&mut result_add_sub_vector, index, result_add);
+            println!("Vektor danach: {:?}", result_add_sub_vector);
+
+            index = 0;
+        }
+        else {
+            index += 1;
         }
     }
-    return result.to_string()
+
+    return result_add_sub_vector
+}
+
+fn calculate_addition(numbers: &Vec<String>, counter: usize, which_operator: char) -> String {
+    
+    let mut result_add: String = String::new();
+    let result: f64;
+    let mut operation: String = String::new();
+    let mut left_right: Vec<f64> = Vec::new();
+
+    for (i, num) in numbers.iter().enumerate() {
+        if num.contains(which_operator) {
+            left_right = left_right_terms(&numbers[i - 1], &numbers[i + 1]).to_vec();
+            
+            match which_operator {
+                '+' => {
+                    result = left_right[0] + left_right[1];
+                    operation = "Addition".to_string();
+                }
+                '-' => {
+                    result = left_right[0] - left_right[1];
+                    operation = "Subtraktion".to_string();
+                }
+                _ => return "Invalid Number".to_string()
+            }
+
+            result_add = result.to_string();  
+            break;
+        }
+    }
+    print!("{}. ", counter);
+    display_terminals_validate(operation, &left_right[0].to_string(), &left_right[1].to_string(), &which_operator.to_string(), &result_add);
+    
+    return result_add.to_string()
 }
 
 
 // Kleines Refactoring weil das entfernen und hinzufügen mehrmals
 // vorkommt, habe ich sie ausgelagert.
-fn removing_from_vector(numbers_vector: &mut Vec<String>, index: usize, result: String) {
+pub fn removing_from_vector(numbers_vector: &mut Vec<String>, index: usize, result: String) {
     // Das aktuelle Element wird ersetzt
     numbers_vector[index] = result;
     // Das Element danach wird entfernt

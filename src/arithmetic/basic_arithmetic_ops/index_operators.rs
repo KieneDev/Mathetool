@@ -20,13 +20,13 @@ fn get_index_brackets_operators(brackets: &Vec<String>) -> Vec<(usize, usize)> {
     return bracket_pairs
 }
 
-fn get_index_mult_div(mult_div: Vec<String>) -> Vec<usize> {
-    let mut index_mult_div: Vec<usize> = Vec::new(); 
+// fn get_index_mult_div(mult_div: Vec<String>) -> Vec<usize> {
+//     let mut index_mult_div: Vec<usize> = Vec::new(); 
     
-    for (index, operator) in mult_div.iter().enumerate() {
-        if operator.contains("*") || operator.contains("/") {
-            index_mult_div.push(index);
-        }
-    }
-    return index_mult_div
-}
+//     for (index, operator) in mult_div.iter().enumerate() {
+//         if operator.contains("*") || operator.contains("/") {
+//             index_mult_div.push(index);
+//         }
+//     }
+//     return index_mult_div
+// }
