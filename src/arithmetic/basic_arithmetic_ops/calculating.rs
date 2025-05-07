@@ -1,6 +1,23 @@
 use core::f64;
 use crate::helping_tools::display_terminal::display_terminals_validate;
 
+// Rechnregel Klammern auflösen und berechnen
+pub fn calculate_resolve_brackets(numbers: Vec<String>, brackets_max_count: usize) -> Vec<String> {
+    
+    return Vec::new();
+}
+
+// Berechnung für die Klammern um sie danach aufzulösen
+fn calculate_brackets(numbers: Vec<String>) {
+
+    let mut index: usize = 0;
+
+    println!("calculate_brackets");
+
+    todo!("\nFormel (Klammern) ist noch nicht fertig\n");
+}
+
+
 // Rechenregel Potenzen
 pub fn calculate_numbers_powers(numbers: Vec<String>) -> Vec<String> {
     let mut result_powers_vector: Vec<String> = numbers;
@@ -20,7 +37,7 @@ pub fn calculate_numbers_powers(numbers: Vec<String>) -> Vec<String> {
             let result_powers: String = calculate_powers(&result_powers_vector, counter_powers, '^');
             
             removing_from_vector(&mut result_powers_vector, index, result_powers);
-            println!("Vektor danach: {:?}\n", result_powers_vector);
+            println!("Vektor danach: {:?}", result_powers_vector);
             
             index = 0;
         }
@@ -29,6 +46,35 @@ pub fn calculate_numbers_powers(numbers: Vec<String>) -> Vec<String> {
         }
     }
     return result_powers_vector
+}
+
+// Funktion für die Potenzen
+fn calculate_powers(numbers: &Vec<String>, counter: usize, which_operator: char) -> String {
+    let mut result_powers: String = String::new();
+    let mut operation: String = String::new();
+    let result: f64;
+    let mut left_right: Vec<f64> = Vec::new();
+    
+    for (i, num) in numbers.iter().enumerate() {
+        if num.contains(which_operator) {
+
+            left_right = left_right_terms(&numbers[i - 1], &numbers[i + 1]).to_vec();
+            
+            match which_operator {
+                '^' => {
+                    result = f64::powf(left_right[0], left_right[1]);
+                    operation = "Potenz".to_string();
+                }
+                _ => return "Invalid Number".to_string()
+            }
+            result_powers = result.to_string();  
+            break;
+        }
+    }
+    print!("{}. ", counter);
+    display_terminals_validate(operation, &left_right[0].to_string(), &left_right[1].to_string(), &which_operator.to_string(), &result_powers);
+
+    return result_powers
 }
 
 // Hier wird die vorletzte Rechenregel angewendet die Punkt vor Strich
@@ -40,8 +86,6 @@ pub fn calculate_numbers_mult_diff(numbers: Vec<String>) -> Vec<String> {
     let mut counter_mult: usize = 0; 
     let mut counter_div: usize = 0;
 
-    println!("\nBerechnung Multiplikation und Division\n");
-    
     while index < result_mul_div_vector.len(){
 
         // Multiplikation
@@ -53,7 +97,7 @@ pub fn calculate_numbers_mult_diff(numbers: Vec<String>) -> Vec<String> {
             let result_mult: String = calculate_mult_diff(&result_mul_div_vector, counter_mult, '*');
             
             removing_from_vector(&mut result_mul_div_vector, index, result_mult);
-            println!("Vektor danach: {:?}\n", result_mul_div_vector);
+            println!("Vektor danach: {:?}", result_mul_div_vector);
             
             index = 0;
         }
@@ -67,7 +111,7 @@ pub fn calculate_numbers_mult_diff(numbers: Vec<String>) -> Vec<String> {
             let result_mult: String = calculate_mult_diff(&result_mul_div_vector, counter_div, '/');
             
             removing_from_vector(&mut result_mul_div_vector, index, result_mult);
-            println!("Vektor danach: {:?}\n", result_mul_div_vector);
+            println!("Vektor danach: {:?}", result_mul_div_vector);
 
             index = 0;
         }
@@ -77,26 +121,6 @@ pub fn calculate_numbers_mult_diff(numbers: Vec<String>) -> Vec<String> {
     }
 
     return result_mul_div_vector
-}
-
-
-// Mit dieser Funktion werden die Zahlen sowohl positiv
-// und negativ miteinander addiert. Das ist der letzte Schritt
-// bei den Rechenregeln. Da hier das Vorzeichen mitgenommen wird
-// muss man hier nicht auf die Vertauschungsregel achten.
-pub fn calculate_numbers_addition(numbers: Vec<String>) -> String {
-    
-    let mut result: f64 = 0.0;
-
-    println!("Berechnung Addition und Subtraktion\n");
-    
-    for num in numbers.iter() {
-        match num.parse::<f64>() {
-            Ok(number) => result += number,
-            Err(_) => return "Error: invalid number".to_string(),
-        }
-    }
-    return result.to_string()
 }
 
 // Funktion für die Multiplikation und die Division
@@ -132,50 +156,23 @@ fn calculate_mult_diff(numbers: &Vec<String>, counter: usize, which_operator: ch
     return result_mult 
 }
 
-// Funktion für die Potenzen
-fn calculate_powers(numbers: &Vec<String>, counter: usize, which_operator: char) -> String {
-    let mut result_powers: String = String::new();
-    let mut operation: String = String::new();
-    let result: f64;
-    let mut left_right: Vec<f64> = Vec::new();
+// Mit dieser Funktion werden die Zahlen sowohl positiv
+// und negativ miteinander addiert. Das ist der letzte Schritt
+// bei den Rechenregeln. Da hier das Vorzeichen mitgenommen wird
+// muss man hier nicht auf die Vertauschungsregel achten.
+pub fn calculate_numbers_addition(numbers: Vec<String>) -> String {
     
-    for (i, num) in numbers.iter().enumerate() {
-        if num.contains(which_operator) {
+    let mut result: f64 = 0.0;
 
-            left_right = left_right_terms(&numbers[i - 1], &numbers[i + 1]).to_vec();
-            
-            match which_operator {
-                '^' => {
-                    result = f64::powf(left_right[0], left_right[1]);
-                    operation = "Potenz".to_string();
-                }
-                _ => return "Invalid Number".to_string()
-            }
-            result_powers = result.to_string();  
-            break;
+    for num in numbers.iter() {
+        match num.parse::<f64>() {
+            Ok(number) => result += number,
+            Err(_) => return "Error: invalid number".to_string(),
         }
     }
-    print!("{}. ", counter);
-    display_terminals_validate(operation, &left_right[0].to_string(), &left_right[1].to_string(), &which_operator.to_string(), &result_powers);
-
-    return result_powers
+    return result.to_string()
 }
 
-pub fn calculate_formula(numbers: Vec<String>) {
-    let mut count_powers: usize = 0;
-    let mut count_mult: usize = 0;
-    let mut count_diff: usize = 0;
-    
-    for i in numbers.iter() {
-        if i.contains("^") {count_powers += 1;}
-        if i.contains("*") {count_mult += 1;}
-        if i.contains("/") {count_diff += 1;}
-    }
-    println!();
-    println!("Potenzen      : {}", count_powers);
-    println!("Multiplikation: {}", count_mult);
-    println!("Division      : {}", count_diff);
-}
 
 // Kleines Refactoring weil das entfernen und hinzufügen mehrmals
 // vorkommt, habe ich sie ausgelagert.
@@ -196,3 +193,5 @@ fn left_right_terms(left: &str, right: &str) ->[f64;2] {
         right.parse::<f64>().expect("Invalid Number")
     ]
 }
+
+
