@@ -8,8 +8,10 @@ pub fn strings_refactor(crazy_string: String) -> Vec<String> {
     let result_string: String = remove_whitespaces(crazy_string);
     let terms_replaced: String = terms_replace_operators(result_string);
     let terms_splitted: Vec<String> = split_terms(terms_replaced);
+
+    let negative_numbers: Vec<String> = validate_negative_numbers(terms_splitted);
     
-    return terms_splitted
+    return negative_numbers
 }
 
 // Um überflüssige Leerzeichen zu entfernen
@@ -90,4 +92,19 @@ fn split_terms(splitting_terms: String) -> Vec<String> {
     }
     display_terminals("Terme einzeln aufgeteilt".to_string(), &splitted_terms.join(" "));
     splitted_terms
+}
+
+fn validate_negative_numbers(negative_numbers: Vec<String>) -> Vec<String> {
+    let mut negative_num: Vec<String> = negative_numbers;
+    
+    let mut i = 0;
+    while i < negative_num.len() {
+        if negative_num[i].contains("-") && i > 0 && negative_num[i - 1] == "" {
+            negative_num.remove(i - 1);
+            negative_num.insert(i - 1, "0".to_string());
+            i += 1;
+        }
+        i += 1;
+    }
+    return negative_num
 }
