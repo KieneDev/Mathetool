@@ -1,12 +1,15 @@
 use super::display_terminal::display_terminals;
 
 // Diese Funktion ist für andere sichtbar und macht die
-// Stringmanipulationen verfügbar.
+// Stringmanipulationen verfügbar. Hier wird auch für die 
+// Klammerberechnung noch ein bool hinzugefügt, was später
+// abgefragt werden kann ob die Klammerberechnung nötig ist.
 pub fn strings_refactor(crazy_string: String) -> Vec<String> {
     let result_string: String = remove_whitespaces(crazy_string);
-    let result_validation = validation_brackets_operators(result_string);
-    let terms_replaced: String = terms_replace_operators(result_validation);
-    return split_terms(terms_replaced)
+    let terms_replaced: String = terms_replace_operators(result_string);
+    let terms_splitted: Vec<String> = split_terms(terms_replaced);
+    
+    return terms_splitted
 }
 
 // Um überflüssige Leerzeichen zu entfernen
@@ -18,10 +21,14 @@ fn remove_whitespaces(with_whitespaces: String) -> String {
 }
 
 // Extra Funktionen für den Anfang einer Formel,
-// und auf vollständigkeit der Klammern.
-fn validation_brackets_operators(brackets_ops: String) -> String {
+// und auf vollständigkeit der Klammern. Zudem wird hier ein
+// bool zurückgegeben für die notwendigkeit der Klammerberechnung.
+// Da hier nur eine Validierung gemacht wird benutze ich Referenzen
+// anstatt die Ownership zu übergeben.
+fn validation_brackets_operators(brackets_ops: &String) -> bool {
     let mut count_brackets: usize = 0;
-    let brackets_ops_string: String = brackets_ops;
+    let brackets_ops_string: &String = brackets_ops;
+    let mut if_brackets: bool = false;
 
     // Das allererste Zeichen wird gelesen.
     let first_char: char = brackets_ops_string.chars().nth(0).unwrap();
@@ -38,6 +45,7 @@ fn validation_brackets_operators(brackets_ops: String) -> String {
             }
             if terms == '(' || terms == ')' {
                 count_brackets += 1;
+                if_brackets = true;
             }
         }
         // prüfen ob die Klammern vollständig sind
@@ -48,12 +56,12 @@ fn validation_brackets_operators(brackets_ops: String) -> String {
     else {
         panic!("Anfang der Formel muss mit +,-, ( oder einer Zahl beginnen");
     }
-    return brackets_ops_string
+    return if_brackets
     
 }
 
-// Mit dieser Funktion werden nur Leerzeichen vor dem Operator gesetzt, um
-// sie in der Funktion "split_terms" besser zu teilen.
+// Mit dieser Funktion werden nur Leerzeichen vor den Operatoren und die Klammern
+// gesetzt, um sie in der Funktion "split_terms" besser zu teilen.
 fn terms_replace_operators(splitted_equation: String) -> String {
     let mut terms_replaced: String = String::new();
 
@@ -61,8 +69,8 @@ fn terms_replace_operators(splitted_equation: String) -> String {
             match terms {
                 '(' => terms_replaced.push_str("( "),
                 ')' => terms_replaced.push_str(" )"),
-                '+' => terms_replaced.push_str( " +"),
-                '-' => terms_replaced.push_str(" -"),
+                '+' => terms_replaced.push_str( " + "),
+                '-' => terms_replaced.push_str(" - "),
                 '*' => terms_replaced.push_str(" * "),
                 '/' => terms_replaced.push_str(" / "),
                 '^' => terms_replaced.push_str(" ^ "),
