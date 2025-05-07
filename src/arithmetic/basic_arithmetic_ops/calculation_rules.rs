@@ -82,29 +82,29 @@ fn find_operators(numbers: &Vec<String>) -> Vec<OperatorInfo> {
         && operations[4].active && operations[5].active {
             break;
         }
-
-        if i.contains("(") {
+        
+        if i.contains(operations[0].symbol) {
             if operations[0].active == true { continue; }
             operations[0].active = true;
         }
 
-        if i.contains("^") {
+        if i.contains(operations[1].symbol) {
             if operations[1].active == true { continue; }
             operations[1].active = true;
         }
-        if i.contains("*") {
+        if i.contains(operations[2].symbol) {
             if operations[2].active == true { continue; }
             operations[2].active = true;
         }
-        if i.contains("/") {
+        if i.contains(operations[3].symbol) {
             if operations[3].active == true { continue; }
             operations[3].active = true;
         }
-        if i.contains("+") {
+        if i.contains(operations[4].symbol) {
             if operations[4].active == true { continue; }
             operations[4].active  = true;
         }
-        if i.contains("-") {
+        if i.contains(operations[5].symbol) {
             if operations[5].active == true { continue; }
             operations[5].active = true;
         }

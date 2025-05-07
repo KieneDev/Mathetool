@@ -52,7 +52,6 @@ fn calculate_powers(numbers: &Vec<String>, counter: usize, which_operator: char)
                     let complex_result: Complex<f64> = Complex::new(base, 0.0).powf(exponent);
 
                     result = complex_result.re;
-                    //result = f64::powf(left_right[0], left_right[1]);
                     operation = "Potenz".to_string();
                 }
                 _ => return "Invalid Number".to_string()
