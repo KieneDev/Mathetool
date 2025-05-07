@@ -46,7 +46,8 @@ pub fn calculate_resolve_brackets(numbers: Vec<String>) -> Vec<String> {
 }
 
 
-// Berechnung für die Klammern um sie danach aufzulösen
+// Berechnung für die Klammern um sie danach aufzulösen, und um
+// die Formel zu bereinigen für die nächsten Schritte.
 fn calculate_brackets(numbers: &mut Vec<String>, brackets_index: (usize, usize)) {
 
     println!("Vektor davor: {:?}", numbers);
