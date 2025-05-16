@@ -10,10 +10,11 @@ mod algebra;
 mod arithmetic;
 
 fn main() {
-    //let equation_string: String = "(100+2)^2-2*(5*(8/(9+12)+5)/2)*8+1*(2+5)*9".to_string();
+    //let equation_string: String = "(100+2)^2-2*(5*(8/(9-12)+5)/2)*8+1*(2+5)*9".to_string();
     // let equation_string: String = "100+2*2-2^5*8/9-12+5/2*8+12".to_string();
-    // let equation_string: String = "12+15".to_string();
-     let equation_string: String = "(3 + 5) * (2^3 + 4) - 6 / (2 + 1)".to_string();
+    //let equation_string: String = "(3+2)^2 * (4 ^ (-3)) - 5 * (10 / (2 + 3)) + 8 ^ 2".to_string();
+    // let equation_string: String = "3 + (-2) * (4 - 1)^2 - (-6 / 2 + 3)".to_string();
+    let equation_string: String = "-(-5)-(-10)*6+5-(3-(6-10))+5^(6+5)".to_string();
     println!();
     display_terminals("Original Formel".to_string(), &equation_string);
 

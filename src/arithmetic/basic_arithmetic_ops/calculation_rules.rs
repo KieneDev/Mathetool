@@ -7,31 +7,33 @@ pub(crate) use crate::paths::calc_nums::{calculate_numbers_addition, calculate_n
 // macht.
 pub fn rules_for_calculation(formula: Vec<String>) -> String {
 
-    let found_ops: Vec<OperatorInfo> = find_operators(&formula);
+    let mut found_ops: Vec<OperatorInfo> = find_operators(&formula);
     
     let mut changed_formula: Vec<String> = formula;
 
     if found_ops[0].active {
         println!("Klammern auflösen/berechnen\n");
         changed_formula = calculate_resolve_brackets(changed_formula);
-        println!("--------------------------");
+        found_ops = find_operators(&changed_formula);
+        println!("--------------------------\n");
     }
 
     if found_ops[1].active {
         println!("Potenzen werden berechnet.\n");
         changed_formula = calculate_numbers_powers(changed_formula);
-        println!("--------------------------");
+        //found_ops[1].active = false;
+        println!("--------------------------\n");
     }
     if found_ops[2].active || found_ops[3].active {
         println!("Berechnung (Punkt vor Strich)\n");
         changed_formula = calculate_numbers_mult_diff(changed_formula);
-        println!("--------------------------");
+        println!("--------------------------\n");
     }
 
     if found_ops[4].active || found_ops[5].active {
         println!("Berechnung (Plus und Minus)\n");
         changed_formula = calculate_numbers_addition(changed_formula);
-        println!("--------------------------");
+        println!("--------------------------\n");
     }
     
     return changed_formula[0].to_string()
@@ -78,36 +80,33 @@ fn find_operators(numbers: &Vec<String>) -> Vec<OperatorInfo> {
 
     for i in numbers.iter() {
 
-        if operations[0].active && operations[1].active && operations[2].active && operations[3].active 
-        && operations[4].active && operations[5].active {
-            break;
-        }
-
-        if i.contains("(") {
+        if i.contains(operations[0].symbol) {
             if operations[0].active == true { continue; }
             operations[0].active = true;
         }
 
-        if i.contains("^") {
+        else if i.contains(operations[1].symbol) {
             if operations[1].active == true { continue; }
             operations[1].active = true;
         }
-        if i.contains("*") {
+        else if i.contains(operations[2].symbol) {
             if operations[2].active == true { continue; }
             operations[2].active = true;
         }
-        if i.contains("/") {
+        else if i.contains(operations[3].symbol) {
             if operations[3].active == true { continue; }
             operations[3].active = true;
         }
-        if i.contains("+") {
+        else if i.contains(operations[4].symbol) {
             if operations[4].active == true { continue; }
             operations[4].active  = true;
         }
-        if i.contains("-") {
+        else if i.contains(operations[5].symbol) {
             if operations[5].active == true { continue; }
             operations[5].active = true;
         }
     }
     return operations
 }
+
+

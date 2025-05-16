@@ -8,8 +8,6 @@ pub fn calculate_numbers_powers(numbers: Vec<String>) -> Vec<String> {
     let mut index: usize = 0;
     let mut counter_powers: usize = 0;
 
-    println!("\nBerechnung Potenzen\n");
-
     while index < result_powers_vector.len(){
 
         // Potenzen
@@ -52,7 +50,6 @@ fn calculate_powers(numbers: &Vec<String>, counter: usize, which_operator: char)
                     let complex_result: Complex<f64> = Complex::new(base, 0.0).powf(exponent);
 
                     result = complex_result.re;
-                    //result = f64::powf(left_right[0], left_right[1]);
                     operation = "Potenz".to_string();
                 }
                 _ => return "Invalid Number".to_string()
@@ -175,7 +172,7 @@ pub fn calculate_numbers_addition(numbers: Vec<String>) -> Vec<String> {
         }
 
         // Division
-        else if result_add_sub_vector[index].contains("-") {
+        else if result_add_sub_vector[index].contains("-") && result_add_sub_vector[index].len() == 1 {
 
             counter_div += 1;
 
@@ -203,7 +200,9 @@ fn calculate_addition(numbers: &Vec<String>, counter: usize, which_operator: cha
     let mut left_right: Vec<f64> = Vec::new();
 
     for (i, num) in numbers.iter().enumerate() {
-        if num.contains(which_operator) {
+        if num.len() == 1 && num.chars().next() == Some(which_operator) {
+            println!("Num länge: {}", num.len());
+            println!("left_right: {:?}", left_right);
             left_right = left_right_terms(&numbers[i - 1], &numbers[i + 1]).to_vec();
             
             match which_operator {
