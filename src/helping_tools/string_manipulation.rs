@@ -94,15 +94,31 @@ fn split_terms(splitting_terms: String) -> Vec<String> {
     splitted_terms
 }
 
+// Wenn die Formel mit einem Minus anfängt, wird hier vorne eine 0 rangehängt,
+// damit die Berechnung sauber durchgeführt wird. Da die Berechnungen bei allen auf 
+// dem Prinzip "Links-Operator-Rechts" ausgeführt wird. Auch wird hier geparst wenn
+// "-(-5)" auftritt. Auch die Berechnung mit negativen Zahlen wird hier geparst.
 fn validate_negative_numbers(negative_numbers: Vec<String>) -> Vec<String> {
     let mut negative_num: Vec<String> = negative_numbers;
     
     let mut i = 0;
     while i < negative_num.len() {
+        // Fallunterscheidung wenn (-5) auftritt
         if negative_num[i].contains("-") && i > 0 && negative_num[i - 1] == "" {
             negative_num.remove(i - 1);
             negative_num.insert(i - 1, "0".to_string());
             i += 1;
+        }
+        else if i == 0 && negative_num[i].contains("-") {
+            // Sonderfall wenn die Klammer mit - anfängt.
+            if negative_num[i].contains("-") && negative_num[i + 1] == "(" {
+                negative_num.insert(i, "0".to_string());
+                continue;
+            }
+            let negative_number = 0 - negative_num[i + 1].parse::<i32>().expect("invalid number");
+            negative_num.remove(i);
+            negative_num.insert(i, negative_number.to_string());
+            negative_num.remove(i + 1);
         }
         i += 1;
     }
