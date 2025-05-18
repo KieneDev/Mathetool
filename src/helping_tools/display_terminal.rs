@@ -9,3 +9,15 @@ pub(crate) fn display_terminals_validate(output_string: String, left: &String, r
 
     println!("{:<width$} : {} {} {} = {}", output_string, left, operator, right, result, width = width);
 }
+
+pub fn clearscreen() {
+    #[cfg(unix)]
+    {
+        let _ = std::process::Command::new("clear").status();
+    }
+
+    #[cfg(windows)]
+    {
+        let _ = std::process::Command::new("cmd").args(&["/C", "cls"]).status();
+    }
+}

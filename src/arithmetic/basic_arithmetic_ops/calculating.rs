@@ -90,12 +90,12 @@ pub fn calculate_numbers_mult_diff(numbers: Vec<String>) -> Vec<String> {
         }
 
         // Division
-        else if result_mul_div_vector[index].contains("/") {
+        else if result_mul_div_vector[index].contains(":") || result_mul_div_vector[index].contains("/") {
 
             counter_div += 1;
 
             println!("Vektor davor: {:?}", result_mul_div_vector);
-            let result_mult: String = calculate_mult_diff(&result_mul_div_vector, counter_div, '/');
+            let result_mult: String = calculate_mult_diff(&result_mul_div_vector, counter_div, result_mul_div_vector[index].parse::<char>().unwrap());
             
             removing_from_vector(&mut result_mul_div_vector, index, result_mult);
             println!("Vektor danach: {:?}", result_mul_div_vector);
@@ -126,7 +126,12 @@ fn calculate_mult_diff(numbers: &Vec<String>, counter: usize, which_operator: ch
                     result = left_right[0] * left_right[1];
                     operation = "Multiplikation".to_string();
                 }
-                '/' => {
+                ':' | '/' => {
+                    // Prüfen des rechten Operanden auf 0, wenn ja
+                    // abbruch.
+                    if left_right[1] == 0.0 {
+                        panic!("Division durch 0 nicht möglich!");
+                    }
                     result = left_right[0] / left_right[1];
                     operation = "Division".to_string();
                 }

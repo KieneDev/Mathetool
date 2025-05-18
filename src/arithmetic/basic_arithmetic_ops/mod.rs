@@ -4,3 +4,4 @@ pub mod index_operators;
 pub mod operators;
 pub mod operations;
 pub mod brackets_solver;
+pub mod calculating_fractions;
