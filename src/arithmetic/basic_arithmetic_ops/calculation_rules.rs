@@ -11,26 +11,33 @@ pub fn rules_for_calculation(formula: Vec<String>) -> String {
     
     let mut changed_formula: Vec<String> = formula;
 
-    if found_ops[0].active {
+    // if found_ops[0].active {
+    //     println!("\nBrüche berechnen\n");
+    //     changed_formula = calculate_fraction(changed_formula);
+    //     found_ops = find_operators(&changed_formula);
+    //     println!("--------------------------\n");
+    // }
+
+    if found_ops[1].active {
         println!("Klammern auflösen/berechnen\n");
         changed_formula = calculate_resolve_brackets(changed_formula);
         found_ops = find_operators(&changed_formula);
         println!("--------------------------\n");
     }
 
-    if found_ops[1].active {
+    if found_ops[2].active {
         println!("Potenzen werden berechnet.\n");
         changed_formula = calculate_numbers_powers(changed_formula);
         //found_ops[1].active = false;
         println!("--------------------------\n");
     }
-    if found_ops[2].active || found_ops[3].active {
+    if found_ops[3].active || found_ops[4].active || found_ops[0].active {
         println!("Berechnung (Punkt vor Strich)\n");
         changed_formula = calculate_numbers_mult_diff(changed_formula);
         println!("--------------------------\n");
     }
 
-    if found_ops[4].active || found_ops[5].active {
+    if found_ops[5].active || found_ops[6].active {
         println!("Berechnung (Plus und Minus)\n");
         changed_formula = calculate_numbers_addition(changed_formula);
         println!("--------------------------\n");
@@ -67,15 +74,16 @@ impl OperatorInfo {
 // ob eine Funktion zum berechnen aufgerufen werden muss 
 // oder auch nicht. Und damit die Rechenregeln in der richtigen
 // Reihenfolge ablaufen.
-fn find_operators(numbers: &Vec<String>) -> Vec<OperatorInfo> {
+pub fn find_operators(numbers: &Vec<String>) -> Vec<OperatorInfo> {
     
     let mut operations:Vec<OperatorInfo> = vec![
-        OperatorInfo { index: 0, symbol: '(', active: false },
-        OperatorInfo { index: 1, symbol: '^', active: false },
-        OperatorInfo { index: 2, symbol: '*', active: false },
-        OperatorInfo { index: 3, symbol: '/', active: false },
-        OperatorInfo { index: 4, symbol: '+', active: false },
-        OperatorInfo { index: 5, symbol: '-', active: false },
+        OperatorInfo { index: 0, symbol: '/', active: false },
+        OperatorInfo { index: 1, symbol: '(', active: false },
+        OperatorInfo { index: 2, symbol: '^', active: false },
+        OperatorInfo { index: 3, symbol: '*', active: false },
+        OperatorInfo { index: 4, symbol: ':', active: false },
+        OperatorInfo { index: 5, symbol: '+', active: false },
+        OperatorInfo { index: 6, symbol: '-', active: false },
     ];
 
     for i in numbers.iter() {
@@ -84,11 +92,11 @@ fn find_operators(numbers: &Vec<String>) -> Vec<OperatorInfo> {
             if operations[0].active == true { continue; }
             operations[0].active = true;
         }
-
-        else if i.contains(operations[1].symbol) {
+        if i.contains(operations[1].symbol) {
             if operations[1].active == true { continue; }
             operations[1].active = true;
         }
+
         else if i.contains(operations[2].symbol) {
             if operations[2].active == true { continue; }
             operations[2].active = true;
@@ -99,11 +107,15 @@ fn find_operators(numbers: &Vec<String>) -> Vec<OperatorInfo> {
         }
         else if i.contains(operations[4].symbol) {
             if operations[4].active == true { continue; }
-            operations[4].active  = true;
+            operations[4].active = true;
         }
         else if i.contains(operations[5].symbol) {
             if operations[5].active == true { continue; }
-            operations[5].active = true;
+            operations[5].active  = true;
+        }
+        else if i.contains(operations[6].symbol) {
+            if operations[6].active == true { continue; }
+            operations[6].active = true;
         }
     }
     return operations

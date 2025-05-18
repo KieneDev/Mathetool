@@ -17,8 +17,8 @@ pub fn calculate_resolve_brackets(numbers: Vec<String>) -> Vec<String> {
         let mut result_index_brackets: Vec<(usize, usize)> = find_index(&result_brackets_calc);
 
         // Hier hole ich den höchsten Index für die Klammerpaarungen
-        // und die Auflösungen nach dem Prinzip innen nach aussen, und 
-        // Klammern die unabhängig von den verschachtelten bin. Mit
+        // für die Auflösungen nach dem Prinzip von innen nach aussen, und 
+        // Klammernpaare die unabhängig von den verschachtelten sind. Mit
         // dieser Art wird die Reihenfolge eingehalten.
         for i in result_index_brackets.iter() {
             println!("Vektor Klammer: [{:?}, {:?}]", i.0, i.1);
@@ -61,7 +61,7 @@ fn calculate_brackets(numbers: &mut Vec<String>, brackets_index: (usize, usize))
     println!("Vektor davor: {:?}", numbers);
 
     // Ich benutze hier drain, damit kann ich den Teil für die Berechnung
-    // heraus entfernen. Dadurch wird mir der Teil gegeben den ich berechnen kann.
+    // heraus entfernen kann. Dadurch wird mir der Teil gegeben den ich berechnen kann.
     let mut removed_slices: Vec<String> = numbers.drain(brackets_index.0..=brackets_index.1).collect();
 
     // Die Klammern müssen entfernt werden sonst würde es zu
@@ -72,7 +72,7 @@ fn calculate_brackets(numbers: &mut Vec<String>, brackets_index: (usize, usize))
 
     println!("Herausgenommener Term: {:?}", removed_slices);
 
-    // Berechnen nach den Regeln/Reihenfolge der Mathemathik
+    // Berechnen nach den Regeln/Reihenfolge der Mathematik
     let bracket_result: String = rules_for_calculation(removed_slices);
 
     // Zuletzt wird hier das Ergebnis in den Verktor wieder eingefügt,
