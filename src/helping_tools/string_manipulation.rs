@@ -1,3 +1,5 @@
+use std::ops::Index;
+
 use super::display_terminal::display_terminals;
 
 // Diese Funktion ist für andere sichtbar und macht die
@@ -9,8 +11,10 @@ pub fn strings_refactor(crazy_string: String) -> Vec<String> {
     validation_brackets_operators(&mut crazy_string_refactor);
     terms_replace_operators(&mut crazy_string_refactor);
 
-    let terms_splitted: Vec<String> = split_terms(crazy_string_refactor);
+    let mut terms_splitted: Vec<String> = split_terms(crazy_string_refactor);
+    set_operator_mul(&mut terms_splitted);
     let negative_numbers: Vec<String> = validate_negative_numbers(terms_splitted);
+
     
     return negative_numbers
 }
@@ -19,9 +23,7 @@ pub fn strings_refactor(crazy_string: String) -> Vec<String> {
 // Damit sind auch Strings in der Form " 3  +  5  * 3" möglich
 fn remove_whitespaces(with_whitespaces: &mut String) {
     let result_string: String = with_whitespaces.chars().filter(|c| !c.is_whitespace()).collect();
-
     display_terminals("Leerzeichen entfernt".to_string(), &result_string);
-
     *with_whitespaces = result_string;
 }
 
@@ -61,6 +63,8 @@ fn validation_brackets_operators(brackets_ops: &mut String) {
     }
 }
 
+
+
 // Mit dieser Funktion werden nur Leerzeichen vor den Operatoren und die Klammern
 // gesetzt, um sie in der Funktion "split_terms" besser zu teilen.
 fn terms_replace_operators(splitted_equation: &mut String) {
@@ -68,8 +72,8 @@ fn terms_replace_operators(splitted_equation: &mut String) {
 
     for terms in splitted_equation.chars() {
             match terms {
-                '(' => terms_replaced.push_str("( "),
-                ')' => terms_replaced.push_str(" )"),
+                '(' => terms_replaced.push_str(" ( "),
+                ')' => terms_replaced.push_str(" ) "),
                 '+' => terms_replaced.push_str( " + "),
                 '-' => terms_replaced.push_str(" - "),
                 '*' => terms_replaced.push_str(" * "),
@@ -86,12 +90,39 @@ fn terms_replace_operators(splitted_equation: &mut String) {
 // Hier werden die einzelnen Terme nochmals gesplitted, damit man besser
 // mit Ihnen rechnen kann.
 fn split_terms(splitting_terms: String) -> Vec<String> {
-    let mut splitted_terms: Vec<String> = splitting_terms.split(' ').map(str::to_string).collect();
+    let mut splitted_terms: Vec<String> = splitting_terms.split_whitespace().map(str::to_string).collect();
     if splitted_terms[0] == "" {
         splitted_terms.remove(0);
     }
     display_terminals("Terme einzeln aufgeteilt".to_string(), &splitted_terms.join(" "));
     splitted_terms
+}
+
+fn set_operator_mul(set_operator: &mut Vec<String>) {
+    let mut index: usize = 1;
+
+    while index < set_operator.len() - 1 {
+        if index > 0 && set_operator[index] == "(" && is_number(&set_operator[index - 1].to_string()) {
+            set_operator.insert(index, "*".to_string());
+            index += 1;
+        }
+        else if index + 1 < set_operator.len() && set_operator[index] == ")" && is_number(&set_operator[index + 1].to_string()) {
+            set_operator.insert(index + 1, "*".to_string());
+            index += 1;
+        }
+        else if index > 0 && set_operator[index] == "(" && set_operator[index - 1] == ")"{
+            set_operator.insert(index, "*".to_string());
+            index += 1;
+        }
+        index += 1;
+    }
+
+    // println!("Vektor davor: {:?}", set_operator);
+    // todo!("set_operator_mul");
+}
+
+fn is_number(token: &str) -> bool {
+    token.parse::<f64>().is_ok()
 }
 
 // Wenn die Formel mit einem Minus anfängt, wird hier vorne eine 0 rangehängt,

@@ -21,7 +21,7 @@ Zielgruppe sind alle, die Mathematik besser verstehen wollen – von Schülern b
   - Klammern
   - Negative Zahlen (auch trickreich umgesetzt durch Voranstellen von 0)
   - Brüche (optional, aktuell in Entwicklung)
-  - Rechenoperatoren `+`, `-`, `*`, `:`, `/`
+  - Rechenoperatoren `+`, `-`, `*`, `:`, `/`, `^`
 
 ---
 
