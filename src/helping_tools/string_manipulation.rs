@@ -29,23 +29,26 @@ fn remove_whitespaces(with_whitespaces: &mut String) {
 // und auf Vollständigkeit der Klammern.
 fn validation_brackets_operators(brackets_ops: &mut String) {
     let mut count_brackets: usize = 0;
-    //let brackets_ops_string: &String = brackets_ops;
 
     // Das allererste Zeichen wird gelesen.
     let first_char: char = brackets_ops.chars().nth(0).unwrap();
 
-    // Prüfen ob das erste Zeichen des Strings korrekt
-    // anfängt. Bei der Berechnung dürfen nur +, -, ( oder eine Zahl
+    // Bei der Berechnung dürfen nur +, -, ( oder eine Zahl
     // den Anfang machen. Hier wird jeweils das Programm abgebrochen
     // um sicher zu gehen das es nicht in einen inkonsistenten 
-    // Zusatnd kommt.
+    // Zustand kommt.
     if first_char == '-' || first_char == '+' || first_char.is_digit(10) || first_char == '(' {
         for terms in brackets_ops.chars() {
             if terms == ')' && count_brackets == 0 {
                 panic!("Darf nicht mit einer ')' Klammer beginnen")
             }
-            if terms == '(' || terms == ')' {
+            if terms == '(' {
                 count_brackets += 1;
+            } else if terms == ')' {
+                if count_brackets == 0 {
+                    panic!("Zu viele schließende Klammern");
+                }
+                count_brackets -= 1;
             }
         }
         // prüfen ob die Klammern vollständig sind
