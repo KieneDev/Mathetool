@@ -4,7 +4,6 @@ use crate::arithmetic::basic_arithmetic_ops::calculation_rules::rules_for_calcul
 use crate::helping_tools::display_terminal::display_terminals;
 use crate::paths;
 
-
 pub fn mathtool_menue_terminal() {
     
     loop {
