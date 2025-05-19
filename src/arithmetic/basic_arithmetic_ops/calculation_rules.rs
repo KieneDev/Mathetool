@@ -87,35 +87,17 @@ pub fn find_operators(numbers: &Vec<String>) -> Vec<OperatorInfo> {
     ];
 
     for i in numbers.iter() {
-
-        if i.contains(operations[0].symbol) {
-            if operations[0].active == true { continue; }
-            operations[0].active = true;
-        }
-        if i.contains(operations[1].symbol) {
-            if operations[1].active == true { continue; }
-            operations[1].active = true;
-        }
-
-        else if i.contains(operations[2].symbol) {
-            if operations[2].active == true { continue; }
-            operations[2].active = true;
-        }
-        else if i.contains(operations[3].symbol) {
-            if operations[3].active == true { continue; }
-            operations[3].active = true;
-        }
-        else if i.contains(operations[4].symbol) {
-            if operations[4].active == true { continue; }
-            operations[4].active = true;
-        }
-        else if i.contains(operations[5].symbol) {
-            if operations[5].active == true { continue; }
-            operations[5].active  = true;
-        }
-        else if i.contains(operations[6].symbol) {
-            if operations[6].active == true { continue; }
-            operations[6].active = true;
+        for c in i.chars() {
+            match c {
+                '/' => { operations[0].active = true; },
+                '(' => { operations[1].active = true; },
+                '^' => { operations[2].active = true; },
+                '*' => { operations[3].active = true; },
+                ':' => { operations[4].active = true; },
+                '+' => { operations[5].active = true; },
+                '-' => { operations[6].active = true; },
+                _ => {}
+            }
         }
     }
     return operations
