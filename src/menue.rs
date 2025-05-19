@@ -14,7 +14,7 @@ pub fn mathtool_menue_terminal() {
         let mut input: String = input_formula();
 
         match input.as_str().trim() {
-            "y" | "Y" => { break; }
+            "q" | "Q" => { break; }
             "1" => {
                 sub_menue_arithmetic();
             }
@@ -29,15 +29,18 @@ pub fn mathtool_menue_terminal() {
 fn main_print_menue() {
     println!("Mathetool by Super(d/g)oof\n");
     println!("(1). Arithmetik\n");
-    println!("Eingabe als Nummer, zum beenden (y/Y) eingeben.\n");
+    println!("Eingabe als Nummer, zum Beenden (q/Q) eingeben.\n");
     print!("Ihre Eingabe: ");
 }
+
 fn sub_menue_arithmetic() {
     let mut input: String = String::new();
 
     loop {
         clearscreen();
         
+        display_term_rules();
+
         print!("Ihr Term: ");
         input = input_formula();
 
@@ -54,10 +57,15 @@ fn sub_menue_arithmetic() {
 
         input = input_formula();
 
-        match input.as_str() {
+        match input.as_str().trim() {
             "b" | "B" => { break; }
             "w" | "W" => { continue; }
             _ => { print!("Ungültige Eingabe") }
         }
     }
+}
+
+fn display_term_rules() {
+    println!("Bei der Eingabe bitte darauf achten nur gültige Zeichen zu verwenden!\n");
+    println!("Gültige Eingaben sind: '+,-,*,/,:,^,(,)' und alle Zahlen!\n")
 }
